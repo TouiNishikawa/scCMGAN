@@ -12,6 +12,7 @@ pip install  git+https://github.com/TouiNishikawa/scCMGAN.git
 ```
  
 # Usage
+Please see the "Usage_notebook"
 ## load data
 ```bash
 # Path to table data
