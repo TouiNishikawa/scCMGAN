@@ -1,4 +1,4 @@
-# dectgan
+# scCMGAN
 ![画像2](https://user-images.githubusercontent.com/40726615/211593936-1fa5e05b-d6b3-49d2-93b1-dc28912231ac.png)
 
 # Sample data
@@ -8,19 +8,26 @@ Download the sample of single RNA sequence data from "example" folder. (１)
 Install our liblary by this code. 
  
 ```bash
-pip install  git+https://github.com/TouiNishikawa/dectgan.git
+!pip install  git+https://github.com/TouiNishikawa/scCMGAN.git
 ```
  
 # Usage
-training (from epoch:50 to epoch 250, per 50 epoch, celltype to augment: ductal, num of data to generate) 
 ```bash
-import dectgan
-dectgan.train('./baron_train_1_2.csv', 50, 251, 50, "ductal", 1000)
-```
+from scCMGAN import scCMGAN
+# generate model
+model = scCMGAN(persent = 40)
 
-After training, you can adjust the data by this code. (for deconvolution)
-```bash
-dectgan.train2train_aug('./baron_train_1_2.csv','./baron_pDataC_1_2.csv', 1000, 250)
+# finetuning model
+model.fit(df, "cell_1", epochs=40)
+
+# save model
+model.save("saved_model.pkl")
+
+# load model
+model = scCMGAN.load("saved_model.pkl")
+
+# generate data
+synthetic_data = model.sample(10)
 ```
 
 # Software
