@@ -3,7 +3,7 @@
 
 
 # Sample data
-Download the sample of single RNA sequence data from "example" folder. (１)
+Use the sample of single RNA sequence data in "Example" folder.
 
 # Installation
 Install our liblary by this code. 
