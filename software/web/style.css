@@ -1,0 +1,89 @@
+body{
+    font-size: 16px;
+    margin: 0px;
+    font-family: "Arial","Arial_MSFontService",sans-serif;
+    background-color: #E5F0FF;
+}
+
+aside{
+    position: absolute;
+    top: 0vh;
+    bottom: 0vh;
+    left: 0vw;
+    width: 20vw;
+    background-color: white;
+}
+aside g text{
+    opacity: 0.1;
+}
+aside g.enable text{
+    opacity: 0.5;
+}
+aside g.active text{
+    opacity: 1.0;
+}
+
+main{
+    position: absolute;
+    top: 0vh;
+    bottom: 0vh;
+    right: 0vw;
+    width: 80vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: none;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 0px 64px;
+}
+main.active{
+    display: flex;
+}
+
+.flexrow{
+    display: flex;
+    flex-direction: row;
+}
+
+.flexcol{
+    display: flex;
+    flex-direction: column;
+}
+
+.holmiddle{
+    display: flex;
+    justify-content: center;
+}
+
+.vertmiddle{
+    display: flex;
+    align-items: center;
+}
+
+main header{
+    font-size: 2rem;
+    margin: 16px 0px;
+}
+
+section{
+    background-color: white;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+}
+
+section .sectiontitle{
+    font-size: 1.5rem;
+}
+
+.canvasbar{
+    width: 800px;
+    height: 400px;
+}
+
+.canvas512{
+    width: 512px;
+    height: 512px;
+}
+

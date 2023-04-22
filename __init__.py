@@ -1,0 +1,1 @@
+from dectgan.dectgan import *

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecTGAN</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <aside>
+        <svg viewBox="0 0 240 256" width="240px" height="256px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" overflow="hidden">
+            <g id="loaddataset" class="active enable">
+                <text x="32" y="32" font-size="1.5rem" alignment-baseline="middle">Load Dataset</text>
+                <circle cx="16" cy="32" r="8" stroke="green" fill="transparent"/>
+            </g>
+            <line x1="16" y1="40" x2="16" y2="88" stroke="green" fill="transparent" />
+
+            <g id="visualize" class="">
+                <text x="32" y="96" font-size="1.5rem" alignment-baseline="middle">Visualize</text>
+                <circle cx="16" cy="96" r="8" stroke="green" fill="transparent"/>
+            </g>
+            <line x1="16" y1="104" x2="16" y2="152" stroke="green" fill="transparent" />
+            
+            <g id="dectgan">
+                <text x="32" y="160" font-size="1.5rem" alignment-baseline="middle">Dec-TGAN</text>
+                <circle cx="16" cy="160" r="8" stroke="green" fill="transparent"/>
+            </g>
+            <line x1="16" y1="168" x2="16" y2="216" stroke="green" fill="transparent" />
+            
+            <g id="assess">
+                <text x="32" y="224" font-size="1.5rem" alignment-baseline="middle">Assess</text>
+                <circle cx="16" cy="224" r="8" stroke="green" fill="transparent"/>
+            </g>
+        </svg>
+    </aside>
+    <div id="mainwrap">
+        <main class="active">
+            <header>
+                Load Dataset
+            </header>
+            <section>
+                <span class="sectiontitle">Database</span>
+                <input type="button" value="Select CSV file" onclick="onDatabaseSelected()" style="width:128px;">
+            </section>
+            <section>
+                <span class="sectiontitle">Cell Numbers</span>
+                <canvas class="canvasbar" id="cellnumchart"></canvas>
+            </section>
+        </main>
+        <main>
+            <header>
+                Visualize
+            </header>
+            <section>
+                <span class="sectiontitle">Config</span>
+                <div class="flexrow" style="margin-top: 8px;">
+                    <span>Compression</span>
+                    <select name="" id="celltypecolselect" style="margin: 0 32px;">
+                        <option value="umap">U-MAP</option>
+                        <option value="tsne">T-SNE</option>
+                    </select>
+                    <input type="button" id="confirmdatabase" value="Run" onclick="onStartVisualize()" style="width:128px;">
+                </div>
+            </section>
+            <section>
+                <span class="sectiontitle">Visualize</span>
+                <div class="flexrow">
+                    <canvas id="scatter_1" width="512" height="512" class="canvas512"></canvas>
+                    <div class="flexcol">
+                        
+                    </div>
+                </div>
+            </section>
+        </main>
+        <main>
+            <header>
+                Dec-TGAN
+            </header>
+            <section>
+                <span class="sectiontitle">Config</span>
+                <div class="flexrow">
+                    <span>Celltype:</span>
+                    <select name="" id="dectgan_celltype" style="margin: 0 16px 0 8px;">
+                        
+                    </select>
+                    <span>Epoch Start:</span>
+                    <input type="number" name="" id="epoch_start" style="margin: 0 16px 0 8px;width: 60px;" value="10">
+                    <span>Epoch End:</span>
+                    <input type="number" name="" id="epoch_end" style="margin: 0 16px 0 8px;width: 60px;" value="30">
+                    <span>Epoch Term:</span>
+                    <input type="number" name="" id="epoch_term" style="margin: 0 16px 0 8px;width: 60px;" value="10">
+                </div>
+                <input type="button" id="confirmdatabase" value="Run" onclick="onStartGAN()" style="margin-top: 8px;width:128px;">
+            </section>
+            <section>
+                <span class="sectiontitle">About GAN</span>
+                <h3>Overview</h3>
+                <p>    GAN is an abbreviation of "Generative Adversarial Networks" and is one of the most famous neural networks now. It is different from other neural networks in that they create "target AI" and "Its enemy" at the same time. It works just like evolution of animals, prey and predator evolves for thier survival.</p>
+                <h3>What is "Enemy" in GAN?</h3>
+                <p>    GAN's final goal is to make "target AI" create some data, like pictures of anime characters. The "enemy" will detect whether the data is created by "target AI" or "real data." If the enemy manages to differenciate data correctly, target AI needs to be updated. If the enemy cannot detect which is created by AI, then enemy must be updated. This process goes on and on.</p>
+            </section>
+        </main>
+        <main>
+            <header>
+                Assess
+            </header>
+            <section>
+                <span class="sectiontitle">Config</span>
+                <div class="flexrow" style="margin-top: 8px;">
+                    <span>Compression</span>
+                    <select name="" id="celltypecolselect" style="margin: 0 32px;">
+                        <option value="barcode">U-MAP</option>
+                        <option value="barcode">T-SNE</option>
+                        <option value="barcode">PCA & U-MAP</option>
+                    </select>
+                    <input type="button" id="confirmdatabase" value="Run" onclick="onStartAssess()" style="width:128px;">
+                </div>
+            </section>
+            <section>
+                <span class="sectiontitle">Visualize</span>
+                <div class="flexrow">
+                    <canvas id="scatter_2" width="512" height="512" class="canvas512"></canvas>
+                    <div class="flexcol">
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="processrunning" style="display:none; position: fixed; width: 100%; height: 100vh; background: #ffffffaa; text-align: center; font-size: 1.5rem; line-height: 100vh;">
+    Process Running......
+    </div>
+
+    <script type="text/javascript" src="./eel.js"></script>
+    <script src="./tab.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
