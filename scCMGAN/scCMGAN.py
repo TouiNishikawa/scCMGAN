@@ -1,6 +1,10 @@
-import pandas as pd
 from ctgan import CTGAN
-import time
+import pickle
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import Ridge
+import numpy as np
+
 
 class scCMGAN:
     def __init__(self, persent = 40):
