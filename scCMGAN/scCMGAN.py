@@ -2,76 +2,77 @@ import pandas as pd
 from ctgan import CTGAN
 import time
 
-def train(df_path, epoch_start, epoch_end, epoch_term, ct, data_num):
-    df = pd.read_csv(df_path, header=None)
-    ctgan = CTGAN()
-    df.iloc[0, 0] = "cellType"
-    df = df.T
-    df.columns = df.iloc[0]
-    df = df.drop(df.index[[0]])
-    df_celtype = df[df["cellType"]==ct]
+class scCMGAN:
+    def __init__(self, persent = 40):
+        """
+        Args:
+          persent: persent of cell marker gene
+        """
+        self.persent = persent
+        self.base_model = CTGAN()
 
-    for i in range(epoch_start, epoch_end, epoch_term):
-        print(int(i) + "/" +str(epoch_end))
-        discrete_columns = [
-            "cellType"
-        ]
-        if i!= 50:
-            ctgan = CTGAN().load('./model_ctgan_epoch' + str(i-50) +'.pkl')
-        ctgan.fit(df_celtype, discrete_columns, epochs=epoch_term)
-        ctgan.save('./model_ctgan_epoch' + str(i) +'.pkl')
+    def select_biomarker(self, train_df, ct):
+        feats = [f for f in train_df.columns if f not in ['cellType']]
+        train_x, train_y = train_df[feats], train_df['cellType']
+        X = StandardScaler().fit_transform(train_x.values)
+        y = train_y.values
+        y = np.where(y == ct, 1, 0)
 
-        synthetic_data = ctgan.sample(data_num)
-        synthetic_data.to_csv("./synthetic_data" + str(data_num) + "_epoch" +  str(i) + ".csv", index= False)
+        clf = Ridge().fit(X, y)
 
+        importance = np.abs(clf.coef_)
+        K = int(train_df.shape[1] * self.persent / 100)
+        unsorted_max_indices = np.argpartition(-importance, K)[:K]
 
-def train2train_aug(train_data_path, pheno_data_path, num_data, epoch):
-    df = pd.read_csv(train_data_path, header=None)
-    df.iloc[0, 0] = "cellType"
-    df = df.T
-    df.columns = df.iloc[0]
-    df = df.drop(df.index[[0]])
+        biomarkers = list(train_x.columns[unsorted_max_indices])
+        return biomarkers
 
-    synthetic_data = pd.read_csv('./synthetic_data' + str(num_data) + '_epoch' +  str(epoch) + '.csv')
+    def fit(self, train_df, ct, epochs):
+         """
+         Args:
+          train_df: table data for training
+          ct: cellType which you want to generate
+          epochs: epochs of training
+         """
+         df_celtype = df[df["cellType"]==ct]
+         biomarkers = ssgGAN.select_biomarker(self, train_df, ct)
 
-    # 縦横反転、整数変換
-    df_concat_multi = pd.concat([df, synthetic_data])
-    df_concat_multi_T = df_concat_multi.T
-    df_concat_multi_T[1:] = df_concat_multi_T[1:].round().astype(int)
+         not_biomarkers = [f for f in df_celtype.columns if f not in biomarkers]
+         df_biomarker, df_not_biomarker = df_celtype[biomarkers], df_celtype[not_biomarkers]
+         self.df_not_biomarker = df_not_biomarker.drop(columns='cellType')
+         self.base_model.fit(df_biomarker, epochs=epochs)
+         self.cellType = ct
+         self.average_not_biomaeker = self.df_not_biomarker.median(axis=0)
 
-    # 行名の調整
-    df = pd.read_csv(train_data_path, header=None)
-    gene_pd = df[0]
-    df_concat_multi_T.set_axis(gene_pd, inplace=True)
+    def sample(self, num_rows):
+        """
+        Args:
+          num_rows: number of generated data
+        """
+        synthetic_data_biomarker = self.base_model.sample(num_rows)
+        synthetic_data_not_biomarker = pd.DataFrame(columns=self.df_not_biomarker.columns)
+        for _ in range(num_rows):
+            synthetic_data_not_biomarker = synthetic_data_not_biomarker.append(self.average_not_biomaeker, ignore_index=True)
 
-    # 列名の調整
-    sh=df_concat_multi_T.shape
-    df_concat_multi_T.columns=range(sh[1])
-    df_concat_multi_T.columns = df_concat_multi_T.iloc[0]
-    df_concat_multi_T = df_concat_multi_T.drop(df_concat_multi_T.index[[0]])
+        ct_df = pd.DataFrame([self.cellType for i in range(num_rows)], columns=["cellType"])
 
-    # 負のデータの削除
-    df_concat_multi_T = df_concat_multi_T.clip(lower=0)
+        synthetic_data = pd.concat([ct_df, synthetic_data_biomarker, synthetic_data_not_biomarker], axis=1)
 
-    # 出力
-    df_concat_multi_T.to_csv('baron_train1_2_aug_data' + str(num_data) + '_epoch' +  str(epoch) + '.csv', header=True, index=True)
-    print('"baron_train1_2_aug_data' + str(num_data) + '_epoch' +  str(epoch) + '.csv"'+ 'was exported.')
+        return synthetic_data
 
-    # データ生成分のpheno data
-    df_p = pd.read_csv(pheno_data_path)
-    indiv = ["indiv5"]
-    indiv *= df_concat_multi_T.shape[1] - df.shape[1]+1
-    df_p_new = pd.DataFrame(
-        data={'cellID': list(range(1,num_data+1)),
-            'cellType': synthetic_data["cellType"],
-            'sampleID': indiv}
-    )
+    def save(self, path):
+        """
+        Args:
+          path: save path for model
+        """
+        with open(path, mode='wb') as f:
+            pickle.dump(self, f)
 
-    # 結合
-    df_p_concat = pd.concat([df_p, df_p_new])
-    df_p_concat = df_p_concat.drop(df_p_concat.columns[[0]], axis=1)
-    df_p_concat[""] = list(range(1,df_p_concat.shape[0]+1))
-    df_p_concat = df_p_concat.reindex(columns=['', 'cellID', 'cellType',	'sampleID'])
-
-    df_p_concat.to_csv('./baron_pDataC_1_2_aug_data' + str(num_data) + '_epoch' +  str(epoch) + '.csv', header=True, index=False)
-    print('"baron_pDataC_1_2_aug_data' + str(num_data) + '_epoch' +  str(epoch) + '.csv"'+ 'was exported.')
+    def load(path):
+        """
+        Args:
+          path: path to the saved model
+        """
+        with open(path, mode='rb') as f:
+            model = pickle.load(f)
+        return model
