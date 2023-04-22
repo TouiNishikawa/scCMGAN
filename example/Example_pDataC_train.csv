@@ -1,0 +1,16 @@
+,cellID,cellType,sampleID
+1,ID_1,cell_1,indiv1
+2,ID_2,cell_1,indiv1
+3,ID_3,cell_1,indiv2
+4,ID_4,cell_1,indiv2
+5,ID_5,cell_1,indiv2
+6,ID_6,cell_2,indiv1
+7,ID_7,cell_2,indiv1
+8,ID_8,cell_2,indiv2
+9,ID_9,cell_2,indiv2
+10,ID_10,cell_2,indiv2
+11,ID_11,cell_3,indiv1
+12,ID_12,cell_3,indiv1
+13,ID_13,cell_3,indiv2
+14,ID_14,cell_3,indiv2
+15,ID_15,cell_3,indiv2
