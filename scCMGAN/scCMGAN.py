@@ -34,7 +34,7 @@ class scCMGAN:
           ct: cellType which you want to generate
           epochs: epochs of training
          """
-         df_celtype = df[df["cellType"]==ct]
+         df_celtype = train_df[train_df["cellType"]==ct]
          biomarkers = ssgGAN.select_biomarker(self, train_df, ct)
 
          not_biomarkers = [f for f in df_celtype.columns if f not in biomarkers]
