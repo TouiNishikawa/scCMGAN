@@ -12,6 +12,25 @@ Install our liblary by this code.
 ```
  
 # Usage
+## load data
+```bash
+# Path to table data
+df = pd.read_csv('./Example/Example_train.csv', header=None) 
+
+# Name of dataset
+data_set = "Example"
+
+df.iloc[0, 0] = "cellType"
+df = df.T
+df.columns = df.iloc[0]
+df = df.drop(df.index[[0]])
+
+cellType = ["cell_1",
+            "cell_2",
+            "cell_3"]
+```
+
+## Training, saving, loading and generating
 ```bash
 from scCMGAN import scCMGAN
 # generate model
