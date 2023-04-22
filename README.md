@@ -8,7 +8,7 @@ Download the sample of single RNA sequence data from "example" folder. (１)
 Install our liblary by this code. 
  
 ```bash
-!pip install  git+https://github.com/TouiNishikawa/scCMGAN.git
+pip install  git+https://github.com/TouiNishikawa/scCMGAN.git
 ```
  
 # Usage
