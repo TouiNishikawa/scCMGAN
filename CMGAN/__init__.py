@@ -1,1 +1,1 @@
-from scCMGAN.scCMGAN import *
+from scCMGAN.CMGAN import *
