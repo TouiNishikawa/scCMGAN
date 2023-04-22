@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     install_requires = [
         "ctgan",
-        "pickle",
+        "pickle-mixin",
         "sklearn",
         "numpy"
     ]
