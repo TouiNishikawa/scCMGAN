@@ -6,7 +6,7 @@ async function onDatabaseSelected(){
         database = await eel.setDatabase(path)();
         document.getElementById("visualize").classList.add("enable");
         document.getElementById("dectgan").classList.add("enable");
-        
+
         new Chart(document.getElementById("cellnumchart").getContext("2d"), {
             type: 'bar',
             data: {
@@ -80,7 +80,8 @@ async function onStartGAN_sub(){
     let a = parseInt(document.getElementById("epoch_start").value);
     let b = parseInt(document.getElementById("epoch_end").value);
     let c = parseInt(document.getElementById("epoch_term").value);
-    await eel.startGAN(ct, a, b, c)();
+    let d = parseInt(document.getElementById("num_data").value);
+    await eel.startGAN(ct, a, b, c, d)();
     isRunning = false;
     document.getElementById("processrunning").style.display="none";
     document.getElementById("assess").classList.add("enable");
@@ -96,8 +97,9 @@ function onStartAssess(){
 
 //[lastrun, count, x_embedded.tolist()]
 async function onStartAssess_sub(){
-    const assess = await eel.assessGAN()();
-    
+    let d = parseInt(document.getElementById("num_data").value);
+    const assess = await eel.assessGAN(d)();
+
     const datasets = [];
 
     let data = [];
@@ -111,7 +113,7 @@ async function onStartAssess_sub(){
         for(let j=assess[1][i-1];j<assess[1][i];j++){
             data.push({x:assess[2][j][0],y:assess[2][j][1]});
         }
-        datasets.push({label:"GAN"+assess[0][0] + (i-1)*assess[0][3],data:data});
+        datasets.push({label:"GAN(cellType: "+assess[0][0] +", epoch:"+ (i-1)*assess[0][3]+")",data:data});
     }
     const ctx = document.getElementById("scatter_2").getContext("2d");
     new Chart(ctx, {

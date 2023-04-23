@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DecTGAN</title>
+    <title>sc-CMGAN</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -22,13 +22,13 @@
                 <circle cx="16" cy="96" r="8" stroke="green" fill="transparent"/>
             </g>
             <line x1="16" y1="104" x2="16" y2="152" stroke="green" fill="transparent" />
-            
+
             <g id="dectgan">
-                <text x="32" y="160" font-size="1.5rem" alignment-baseline="middle">Dec-TGAN</text>
+                <text x="32" y="160" font-size="1.5rem" alignment-baseline="middle">sc-CMGAN</text>
                 <circle cx="16" cy="160" r="8" stroke="green" fill="transparent"/>
             </g>
             <line x1="16" y1="168" x2="16" y2="216" stroke="green" fill="transparent" />
-            
+
             <g id="assess">
                 <text x="32" y="224" font-size="1.5rem" alignment-baseline="middle">Assess</text>
                 <circle cx="16" cy="224" r="8" stroke="green" fill="transparent"/>
@@ -69,21 +69,21 @@
                 <div class="flexrow">
                     <canvas id="scatter_1" width="512" height="512" class="canvas512"></canvas>
                     <div class="flexcol">
-                        
+
                     </div>
                 </div>
             </section>
         </main>
         <main>
             <header>
-                Dec-TGAN
+                sc-CMGAN
             </header>
             <section>
                 <span class="sectiontitle">Config</span>
                 <div class="flexrow">
                     <span>Celltype:</span>
                     <select name="" id="dectgan_celltype" style="margin: 0 16px 0 8px;">
-                        
+
                     </select>
                     <span>Epoch Start:</span>
                     <input type="number" name="" id="epoch_start" style="margin: 0 16px 0 8px;width: 60px;" value="10">
@@ -91,6 +91,8 @@
                     <input type="number" name="" id="epoch_end" style="margin: 0 16px 0 8px;width: 60px;" value="30">
                     <span>Epoch Term:</span>
                     <input type="number" name="" id="epoch_term" style="margin: 0 16px 0 8px;width: 60px;" value="10">
+                    <span>Number of data:</span>
+                    <input type="number" name="" id="num_data" style="margin: 0 16px 0 8px;width: 60px;" value="100">
                 </div>
                 <input type="button" id="confirmdatabase" value="Run" onclick="onStartGAN()" style="margin-top: 8px;width:128px;">
             </section>

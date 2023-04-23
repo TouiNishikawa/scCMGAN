@@ -13,6 +13,14 @@ homedirectory = os.getcwd()
 class Dataset:
     def __init__(self, path):
         self.path=path
+
+        self.train_df = pd.read_csv(path, header=None)
+        self.train_df.iloc[0, 0] = "cellType"
+        self.train_df = self.train_df.T
+        self.train_df.columns = self.train_df.iloc[0]
+        self.train_df = self.train_df.drop(self.train_df.index[[0]])
+
+        self.celltypes = pd.read_csv(path, header=None, skiprows=lambda x: x != 0).iloc[0,1:]
         self.celltypes = pd.read_csv(path, header=None, skiprows=lambda x: x != 0).iloc[0,1:]
         self.celltypelist=list(self.celltypes.unique())
         self.matrix = pd.read_csv(path, header=None, skiprows=1, index_col=0).T
@@ -75,22 +83,23 @@ def runUmap():
 lastrun = None
 
 @eel.expose
-def startGAN(ct, a, b, c):
+def startGAN(ct, a, b, c, d):
     global lastrun
     os.chdir(homedirectory)
     if dataset != None:
-        lastrun = [ct, a, b, c]
-        dec_tgan.dectgan(dataset.matrix_per_celltypes[ct], a, b, c)
+        lastrun = [ct, a, b, c, d]
+        dec_tgan.dectgan(dataset.train_df, a, b, c, d, ct)
+        #dec_tgan.dectgan(dataset.matrix_per_celltypes[ct], a, b, c, d, ct)
 
 @eel.expose
-def assessGAN():
+def assessGAN(d):
     if(lastrun != None):
         count = []
         mtr = dataset.matrix_per_celltypes[lastrun[0]].copy()
         count.append(len(mtr))
 
         for i in range(lastrun[1], lastrun[2] + 1, lastrun[3]):
-            mtr = pd.concat([mtr, pd.read_csv("./synthetic_data1000_epoch" +  str(i) + ".csv", header=0)])
+            mtr = pd.concat([mtr, pd.read_csv("../output/synthetic_data"+str(d)+"_epoch" +  str(i) + ".csv", header=0).drop('cellType', axis=1)])
             count.append(len(mtr))
 
         reducer = umap.UMAP(n_components=2, random_state=0, n_neighbors=10)
