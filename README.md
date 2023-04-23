@@ -64,7 +64,7 @@ In the directory "softaware", run the run.py file.
 ```bash
 !git clone https://github.com/TouiNishikawa/scCMGAN.git
 cd ./scCMGAN/software
-py -3.8 run.py
+py -3 run.py
 ```
 ![software](https://user-images.githubusercontent.com/40726615/233834332-df4f017a-9314-46d7-a128-3de26ec4491d.png)
 
