@@ -7,7 +7,8 @@ setup(
     install_requires = [
         "ctgan",
         "pickle-mixin",
-        "sklearn",
         "numpy"
     ]
 )
+
+# "sklearn",
