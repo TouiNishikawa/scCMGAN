@@ -62,7 +62,7 @@ pip install umap-learn
 
 In the directory "softaware", run the run.py file.
 ```bash
-!git clone https://github.com/TouiNishikawa/scCMGAN.git
+git clone https://github.com/TouiNishikawa/scCMGAN.git
 cd ./scCMGAN/software
 py -3 run.py
 ```
