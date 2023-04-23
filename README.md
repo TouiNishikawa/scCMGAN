@@ -52,12 +52,24 @@ synthetic_data = model.sample(10)
 ```
 
 # Software
+install some libraries
+```bash
+pip install ctgan
+pip install eel
+pip install pywin32
+pip install umap-learn
+```
+
 In the directory "softaware", run the run.py file.
 ```bash
-Python run.py
+!git clone https://github.com/TouiNishikawa/scCMGAN.git
+cd ./scCMGAN/software
+py -3.8 run.py
 ```
-![画像3](https://user-images.githubusercontent.com/40726615/211597675-ae051a46-3443-4e0c-ae74-9670f6ec0996.png)
+![software](https://user-images.githubusercontent.com/40726615/233834332-df4f017a-9314-46d7-a128-3de26ec4491d.png)
+
 
 # Reference
 1. Baron, M. et al. A single-cell transcriptomic map of the human and mouse pancreas reveals inter- and intra-cell population structure. Cell Syst. 3, 346–360.e4 (2016).
 2. Avila Cobos, Francisco, et al. "Benchmarking of cell type deconvolution pipelines for transcriptomics data." Nature communications 11.1 (2020): 1-14.
+3. Xu, Lei, et al. "Modeling tabular data using conditional gan." Advances in Neural Information Processing Systems 32 (2019).
