@@ -1,4 +1,4 @@
-# scCMGAN
+# sc-CMGAN (stepwise Generative Adversarial Network based on Cell Markers for Single Cell genomics data)
 ![画像1](https://user-images.githubusercontent.com/40726615/233799014-9cb6d659-f40f-460d-b4ed-94743892efe8.png)
 
 
